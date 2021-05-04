@@ -15,7 +15,7 @@ class FSL_Dataset(Dataset):
     """
     def __init__(self, image_size, images_path):
         self.images_path = images_path
-        self.transform = transforms.Compose([transforms.Resize(image_size),
+        self.transform = transforms.Compose([transforms.Resize((image_size, image_size)),
                                        transforms.ToTensor(),
                                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
@@ -34,18 +34,22 @@ class FSL_Dataset(Dataset):
 
 
 
-def data_loader( way,shot, images_size, images_path):
+def data_loader( support_way, support_shot,  query_way, query_shot, images_size, images_path):
     """
     Arguments:
         way: number of classes
         shot: number of images per class
         images_size: size of image
         images_path: root path to images
-
+    Returns:
+        Batch with support and query images
     """
+    if query_way > support_way:
+        raise ValueError('Number of query ways should be equal or smaller than number of support ways.')
+
     dataset = FSL_Dataset(image_size=images_size, images_path=images_path)
     labels = dataset.labels
-    sampler = Task_Sampler(way, shot, labels)
-    loader = DataLoader(dataset, batch_size=1,  sampler = sampler)
+    sampler = Task_Sampler(support_way, support_shot,  query_way, query_shot, labels)
+    batch_size = support_way*support_shot + query_way * query_shot
+    loader = DataLoader(dataset, batch_size=batch_size,  sampler = sampler)
     return loader
-
