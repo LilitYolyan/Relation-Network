@@ -1,0 +1,18 @@
+
+way: 5
+shot: 3
+query_way: 5
+query_shot: 3
+images_size: 28
+images_path: '/media/anna/Data/images_background'
+val_way: 5
+val_shot: 3
+val_query_way: 5
+val_query_shot: 3
+val_images_path: '/media/anna/Data/images_background'
+device: 'cuda'
+workflow : [('train', 1 )]
+_max_iters: 10
+feature_dim: 64
+work_dir: '/media/anna/Data/'
+num_episodes: 10
