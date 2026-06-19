@@ -29,6 +29,22 @@ class Runner:
         self._iter = 0
 
     def run_episode(self, train_mode):
+        """
+            Run a single few-shot episode.
+        
+            Selects the training or validation config values (way, shot,
+            query_way, query_shot, image size, and image path) depending on
+            `train_mode`, builds an episodic data loader from `data_loader`,
+            and feeds each sampled batch through `episode_processor` to
+            compute the relation loss and prediction rewards for that episode.
+        
+            Args:
+                train_mode (bool): If True, uses the training config keys
+                    (`way`, `shot`, `query_way`, `query_shot`, `images_path`).
+                    If False, uses the validation config keys (`val_way`,
+                    `val_shot`, `val_query_way`, `val_query_shot`,
+                    `val_images_path`).
+        """
         if train_mode:
             way = self.cfg['way']
             shot = self.cfg['shot']
