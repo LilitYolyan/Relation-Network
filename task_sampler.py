@@ -3,15 +3,30 @@ from random import sample
 from collections import Counter
 
 class Task_Sampler(Sampler):
-    """
-    Custom sampler
+    """Samples few-shot learning tasks (episodes) from a labeled dataset.
 
-    Arguments:
-        way: number of unique classes
-        shot: number of images per class
-        labels: list of labels of all images
+    Each call to __iter__ constructs one episode by randomly selecting a
+    subset of classes ("ways") and drawing support and query examples
+    ("shots") from those classes, following the standard episodic
+    training setup used in few-shot learning (e.g. Relation Networks,
+    Prototypical Networks).
 
-    Per each iteration returns indexes of images for the batch
+    Args:
+        support_way (int): Number of unique classes to sample for the
+            support set in each episode.
+        support_shot (int): Number of examples per class to draw for
+            the support set.
+        query_way (int): Number of classes (drawn from the sampled
+            support classes) to use for the query set.
+        query_shot (int): Number of examples per class to draw for
+            the query set.
+        labels (list): Labels for every image/example in the dataset,
+            indexed the same way as the underlying dataset.
+
+    Raises:
+        AttributeError: If any class has fewer examples than
+            support_shot + query_shot, since there wouldn't be enough
+            samples to build a full episode for that class.
     """
     def __init__(self, support_way, support_shot,  query_way, query_shot, labels):
         self.support_way = support_way
