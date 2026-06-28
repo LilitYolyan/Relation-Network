@@ -108,6 +108,25 @@ class Runner:
 
     @torch.no_grad()
     def val(self):
+        """Run the validation loop over the configured episodes.
+
+            Sets the feature encoder and relation network to eval mode and iterates
+            over ``num_episodes`` sampled episodes, running each through
+            ``run_episode`` with training disabled. Wrapped in ``@torch.no_grad()``,
+            so no gradients are tracked and no optimizer steps are taken. Per-episode
+            accuracy accumulates in ``self.total_rewards`` under the ``'val'`` key
+            via ``episode_processor``.
+        
+            Reads from ``self.cfg``:
+                num_episodes (int): Number of validation episodes to run.
+        
+            Side effects:
+                Sets ``self.mode`` to ``'val'``, updates ``self._inner_iter``, and
+                accumulates reward counts in ``self.total_rewards``.
+        
+            Returns:
+                None
+        """
         self.feature_encoder.eval()
         self.relation_network.eval()
         self.mode = 'val'
