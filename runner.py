@@ -68,6 +68,28 @@ class Runner:
                                    query_shot)
 
     def train(self):
+        """Run the training loop for one pass over the configured episodes.
+
+            Moves the feature encoder and relation network to the configured
+            device, sets them to train mode, and iterates over ``num_episodes``
+            sampled episodes. For each episode it runs a forward pass via
+            ``run_episode``, clears gradients on both networks, backpropagates the
+            episode loss, and steps both optimizers. A checkpoint is written to the
+            configured work directory every 1000 global iterations.
+        
+            Reads from ``self.cfg``:
+                device (str | torch.device): Target device for the networks.
+                num_episodes (int): Number of episodes to run in this call.
+                work_dir (str): Directory where checkpoints are saved.
+        
+            Side effects:
+                Sets ``self.mode`` to ``'train'``, updates ``self._inner_iter`` and
+                ``self._iter``, mutates network and optimizer state in place, and may
+                write checkpoint files to disk.
+        
+            Returns:
+                None
+        """
         self.feature_encoder.to(self.cfg['device']).train()
         self.relation_network.to(self.cfg['device']).train()
         self.mode = 'train'
