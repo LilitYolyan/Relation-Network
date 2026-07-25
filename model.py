@@ -3,12 +3,18 @@ import torch.nn.functional as F
 
 class EmbeddingNet(nn.Module):
 
+    """First module of Relation Network.
+ 
+    A convolutional embedding network that maps raw input images into a
+    feature representation used for relation comparison.
+ 
+    Input:
+        Tensor of shape (way * shot, 3, 28, 28).
+ 
+    Output:
+        Tensor of shape (way * shot, 64, 5, 5).
     """
-    Class EmbeddingNet
-    First module of Relation Network
-    Takes input tensor of (way * shot, 3, 28, 28) size and returns output tensor of (way * shot, 64, 5, 5) size.
 
-    """
     def __init__(self):
         super(EmbeddingNet, self).__init__()
 
